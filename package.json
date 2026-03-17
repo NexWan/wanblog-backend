@@ -19,7 +19,13 @@
     "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   },
+  "overrides": {
+    "chalk@4": {
+      "ansi-styles": "^4.3.0"
+    }
+  },
   "dependencies": {
+    "@aws-sdk/client-cognito-identity-provider": "^3.1010.0",
     "aws-amplify": "^6.16.3"
   }
 }
