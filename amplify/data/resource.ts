@@ -22,7 +22,7 @@ const schema = a.schema({
       index("slug").queryField("listBlogsBySlug"),
       index("status").sortKeys(["publishedAt"]).queryField("listBlogsByStatus"),
     ])
-    .authorization((allow) => [allow.guest().to(["read"])]),
+    .authorization((allow) => [allow.publicApiKey().to(["read"])]),
 
   Comment: a
     .model({
@@ -34,7 +34,7 @@ const schema = a.schema({
     .secondaryIndexes((index) => [
       index("blogId").queryField("listCommentsByBlogId"),
     ])
-    .authorization((allow) => [allow.guest().to(["read"])]),
+    .authorization((allow) => [allow.publicApiKey().to(["read"])]),
 
   Like: a
     .model({
@@ -43,7 +43,7 @@ const schema = a.schema({
     })
     .identifier(["blogId", "userId"])
     .secondaryIndexes((index) => [index("blogId").queryField("listLikesByBlogId")])
-    .authorization((allow) => [allow.guest().to(["read"])]),
+    .authorization((allow) => [allow.publicApiKey().to(["read"])]),
 });
 
 export type Schema = ClientSchema<typeof schema>;
@@ -51,6 +51,6 @@ export type Schema = ClientSchema<typeof schema>;
 export const data = defineData({
   schema,
   authorizationModes: {
-    defaultAuthorizationMode: "identityPool",
+    defaultAuthorizationMode: "apiKey",
   },
 });
