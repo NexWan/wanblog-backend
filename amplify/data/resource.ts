@@ -8,9 +8,12 @@ const schema = a.schema({
       blogId: a.id().required(),
       title: a.string().required(),
       slug: a.string().required(),
+      excerpt: a.string(),
       tags: a.string().array(),
       contentPath: a.string().required(),
+      coverImagePath: a.string(),
       authorName: a.string().required(),
+      authorUserId: a.string().required(),
       status: a.ref("BlogStatus").required(),
       publishedAt: a.datetime(),
     })

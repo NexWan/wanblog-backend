@@ -1,8 +1,9 @@
-import {defineFunction, secret } from '@aws-amplify/backend'
+import { defineFunction, secret } from "@aws-amplify/backend";
 
 export const postConfirmation = defineFunction({
-    name: 'post-confirmation',
-    environment: {
-        ADMIN_EMAILS: secret('ADMIN_EMAILS')
-    },
-})
+  name: "post-confirmation",
+  resourceGroupName: "auth",
+  environment: {
+    ADMIN_EMAILS: secret("ADMIN_EMAILS"),
+  },
+});
