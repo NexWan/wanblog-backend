@@ -22,7 +22,10 @@ const schema = a.schema({
       index("slug").queryField("listBlogsBySlug"),
       index("status").sortKeys(["publishedAt"]).queryField("listBlogsByStatus"),
     ])
-    .authorization((allow) => [allow.publicApiKey().to(["read"])]),
+    .authorization((allow) => [
+      allow.guest().to(["read"]),
+      allow.group("admin").to(["create", "read", "update", "delete"]),
+    ]),
 
   Comment: a
     .model({
@@ -34,7 +37,12 @@ const schema = a.schema({
     .secondaryIndexes((index) => [
       index("blogId").queryField("listCommentsByBlogId"),
     ])
-    .authorization((allow) => [allow.publicApiKey().to(["read"])]),
+    .authorization((allow) => [
+      allow.guest().to(["read"]),
+      allow.authenticated().to(["create"]),
+      allow.owner().to(["update", "delete"]),
+      allow.group("admin").to(["delete"]),
+    ]),
 
   Like: a
     .model({
@@ -43,7 +51,12 @@ const schema = a.schema({
     })
     .identifier(["blogId", "userId"])
     .secondaryIndexes((index) => [index("blogId").queryField("listLikesByBlogId")])
-    .authorization((allow) => [allow.publicApiKey().to(["read"])]),
+    .authorization((allow) => [
+      allow.guest().to(["read"]),
+      allow.authenticated().to(["create"]),
+      allow.owner().to(["delete", "read"]),
+      allow.group("admin").to(["read", "delete"]),
+    ]),
 });
 
 export type Schema = ClientSchema<typeof schema>;
@@ -51,6 +64,6 @@ export type Schema = ClientSchema<typeof schema>;
 export const data = defineData({
   schema,
   authorizationModes: {
-    defaultAuthorizationMode: "apiKey",
+    defaultAuthorizationMode: "identityPool",
   },
 });
