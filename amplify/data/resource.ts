@@ -24,6 +24,7 @@ const schema = a.schema({
     ])
     .authorization((allow) => [
       allow.guest().to(["read"]),
+      allow.group("guest").to(["read"]),
       allow.group("admin").to(["create", "read", "update", "delete"]),
     ]),
 
@@ -39,6 +40,7 @@ const schema = a.schema({
     ])
     .authorization((allow) => [
       allow.guest().to(["read"]),
+      allow.group("guest").to(["read"]),
       allow.authenticated().to(["create"]),
       allow.owner().to(["update", "delete"]),
       allow.group("admin").to(["delete"]),
@@ -53,6 +55,7 @@ const schema = a.schema({
     .secondaryIndexes((index) => [index("blogId").queryField("listLikesByBlogId")])
     .authorization((allow) => [
       allow.guest().to(["read"]),
+      allow.group("guest").to(["read"]),
       allow.authenticated().to(["create"]),
       allow.owner().to(["delete", "read"]),
       allow.group("admin").to(["read", "delete"]),
