@@ -8,5 +8,10 @@ export const storage = defineStorage({
       allow.guest.to(["read"]),
       allow.groups(["admin"]).to(["read", "write", "delete"]),
     ],
+    "profiles/avatar/{entity_id}/*": [
+      allow.entity("identity").to(["read", "write", "delete"]),
+      allow.groups(["admin"]).to(["read", "write", "delete"]),
+      allow.guest.to(["read"]),
+    ],
   }),
 });

@@ -57,6 +57,24 @@ const schema = a.schema({
       allow.owner().to(["delete", "read"]),
       allow.group("admin").to(["read", "delete"]),
     ]),
+
+  UserProfile: a
+    .model({
+      userId: a.id().required(),
+      username: a.string().required(),
+      displayName: a.string(),
+      bio: a.string(),
+      avatarPath: a.string(),
+    })
+    .identifier(["userId"])
+    .secondaryIndexes((index) => [
+      index("username").queryField("getUserProfileByUsername"),
+    ])
+    .authorization((allow) => [
+      allow.publicApiKey().to(["read"]),
+      allow.owner().to(["create", "update"]),
+      allow.group("admin").to(["create", "read", "update", "delete"]),
+    ]),
 });
 
 export type Schema = ClientSchema<typeof schema>;
