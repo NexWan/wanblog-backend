@@ -23,8 +23,7 @@ const schema = a.schema({
       index("status").sortKeys(["publishedAt"]).queryField("listBlogsByStatus"),
     ])
     .authorization((allow) => [
-      allow.guest().to(["read"]),
-      allow.group("guest").to(["read"]),
+      allow.publicApiKey().to(["read"]),
       allow.group("admin").to(["create", "read", "update", "delete"]),
     ]),
 
@@ -39,8 +38,7 @@ const schema = a.schema({
       index("blogId").queryField("listCommentsByBlogId"),
     ])
     .authorization((allow) => [
-      allow.guest().to(["read"]),
-      allow.group("guest").to(["read"]),
+      allow.publicApiKey().to(["read"]),
       allow.authenticated().to(["create"]),
       allow.owner().to(["update", "delete"]),
       allow.group("admin").to(["delete"]),
@@ -54,8 +52,7 @@ const schema = a.schema({
     .identifier(["blogId", "userId"])
     .secondaryIndexes((index) => [index("blogId").queryField("listLikesByBlogId")])
     .authorization((allow) => [
-      allow.guest().to(["read"]),
-      allow.group("guest").to(["read"]),
+      allow.publicApiKey().to(["read"]),
       allow.authenticated().to(["create"]),
       allow.owner().to(["delete", "read"]),
       allow.group("admin").to(["read", "delete"]),
@@ -68,5 +65,8 @@ export const data = defineData({
   schema,
   authorizationModes: {
     defaultAuthorizationMode: "identityPool",
+    apiKeyAuthorizationMode: {
+      expiresInDays: 365,
+    },
   },
 });
