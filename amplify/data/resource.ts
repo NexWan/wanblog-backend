@@ -21,6 +21,7 @@ const schema = a.schema({
     .secondaryIndexes((index) => [
       index("slug").queryField("listBlogsBySlug"),
       index("status").sortKeys(["publishedAt"]).queryField("listBlogsByStatus"),
+      index("authorUserId").sortKeys(["publishedAt"]).queryField("listBlogsByAuthorUserId"),
     ])
     .authorization((allow) => [
       allow.publicApiKey().to(["read"]),
@@ -65,6 +66,10 @@ const schema = a.schema({
       displayName: a.string(),
       bio: a.string(),
       avatarPath: a.string(),
+      twitterUrl: a.string(),
+      instagramUrl: a.string(),
+      githubUrl: a.string(),
+      websiteUrl: a.string(),
     })
     .identifier(["userId"])
     .secondaryIndexes((index) => [
