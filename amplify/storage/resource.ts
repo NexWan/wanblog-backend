@@ -6,7 +6,13 @@ export const storage = defineStorage({
     "drafts/*": [allow.groups(["admin"]).to(["read", "write", "delete"])],
     "blogs/*": [
       allow.guest.to(["read"]),
+      allow.authenticated.to(["read"]),
       allow.groups(["admin"]).to(["read", "write", "delete"]),
+    ],
+    "profiles/avatar/{entity_id}/*": [
+      allow.entity("identity").to(["read", "write", "delete"]),
+      allow.groups(["admin"]).to(["read", "write", "delete"]),
+      allow.guest.to(["read"]),
     ],
   }),
 });

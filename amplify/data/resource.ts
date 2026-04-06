@@ -21,9 +21,10 @@ const schema = a.schema({
     .secondaryIndexes((index) => [
       index("slug").queryField("listBlogsBySlug"),
       index("status").sortKeys(["publishedAt"]).queryField("listBlogsByStatus"),
+      index("authorUserId").sortKeys(["publishedAt"]).queryField("listBlogsByAuthorUserId"),
     ])
     .authorization((allow) => [
-      allow.guest().to(["read"]),
+      allow.publicApiKey().to(["read"]),
       allow.group("admin").to(["create", "read", "update", "delete"]),
     ]),
 
@@ -38,7 +39,7 @@ const schema = a.schema({
       index("blogId").queryField("listCommentsByBlogId"),
     ])
     .authorization((allow) => [
-      allow.guest().to(["read"]),
+      allow.publicApiKey().to(["read"]),
       allow.authenticated().to(["create"]),
       allow.owner().to(["update", "delete"]),
       allow.group("admin").to(["delete"]),
@@ -52,10 +53,32 @@ const schema = a.schema({
     .identifier(["blogId", "userId"])
     .secondaryIndexes((index) => [index("blogId").queryField("listLikesByBlogId")])
     .authorization((allow) => [
-      allow.guest().to(["read"]),
+      allow.publicApiKey().to(["read"]),
       allow.authenticated().to(["create"]),
       allow.owner().to(["delete", "read"]),
       allow.group("admin").to(["read", "delete"]),
+    ]),
+
+  UserProfile: a
+    .model({
+      userId: a.id().required(),
+      username: a.string().required(),
+      displayName: a.string(),
+      bio: a.string(),
+      avatarPath: a.string(),
+      twitterUrl: a.string(),
+      instagramUrl: a.string(),
+      githubUrl: a.string(),
+      websiteUrl: a.string(),
+    })
+    .identifier(["userId"])
+    .secondaryIndexes((index) => [
+      index("username").queryField("getUserProfileByUsername"),
+    ])
+    .authorization((allow) => [
+      allow.publicApiKey().to(["read"]),
+      allow.owner().to(["create", "update"]),
+      allow.group("admin").to(["create", "read", "update", "delete"]),
     ]),
 });
 
@@ -65,5 +88,8 @@ export const data = defineData({
   schema,
   authorizationModes: {
     defaultAuthorizationMode: "identityPool",
+    apiKeyAuthorizationMode: {
+      expiresInDays: 365,
+    },
   },
 });
