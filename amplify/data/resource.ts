@@ -77,7 +77,7 @@ const schema = a.schema({
     ])
     .authorization((allow) => [
       allow.publicApiKey().to(["read"]),
-      allow.owner().to(["create", "update"]),
+      allow.ownerDefinedIn("userId").identityClaim("sub").to(["create", "read", "update", "delete"]),
       allow.group("admin").to(["create", "read", "update", "delete"]),
     ]),
 });
